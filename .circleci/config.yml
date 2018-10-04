@@ -69,7 +69,7 @@ jobs:
             ssh $SSH_USER@$SSH_HOST "docker pull hnclonecphb/http-api:$CIRCLE_BRANCH
             docker stop http-api
             docker rm http-api
-            docker run --name http-api --publish=5000:5000 -d hnclonecphb/http-api:$CIRCLE_BRANCH"
+            docker run --name http-api --publish=5001:5001 -d hnclonecphb/http-api:$CIRCLE_BRANCH"
 
 workflows:
   version: 2
