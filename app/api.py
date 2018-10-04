@@ -33,6 +33,6 @@ def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
 
-# Run the app on 0.0.0.0:5000
+# Run the app on 0.0.0.0:5001
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port='5001')
+    app.run(debug=True, host='0.0.0.0', port=5001)
