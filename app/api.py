@@ -1,36 +1,30 @@
 from flask import Flask
-from bson.json_util import dumps
 
-# API DOCUMENTATION : https://github.com/HackerNews/API
-# Python API service running on Flask framework,
-# connected to a mongodb database.
+"""
+API DOCUMENTATION : https://github.com/HackerNews/Helge-api
+Python API service running on Flask framework,
+connected to a mongodb database.
+"""
 
-# Global variables
 app = Flask(__name__)
 
 
-# Temporally homepage
+# Status if project is running
 @app.route('/status', methods=['GET'])
 def status():
     return "It's alive"
 
 
-# Get all stories
+# Find latest digested post by querying the backend directly on port 5000
 @app.route('/latest', methods=['GET'])
 def latest():
-    # Find latest digested post by querying the backend directly on port 5000
     return "42"
 
-# Get item by id
+
+# Put the posted data directly on the queue
 @app.route('/post', methods=['POST'])
 def post(post_id):
-    # Put the posted data directly on the queue
     return "Some kewl data"
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
 
 # Run the app on 0.0.0.0:5001
