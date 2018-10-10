@@ -1,4 +1,6 @@
-from flask import Flask
+from flask import Flask, request
+
+from producer import post_to_queue
 
 """
 API DOCUMENTATION : https://github.com/HackerNews/Helge-api
@@ -12,7 +14,7 @@ app = Flask(__name__)
 # Status if project is running
 @app.route('/status', methods=['GET'])
 def status():
-    return "It's alive"
+    return "Alive"
 
 
 # Find latest digested post by querying the backend directly on port 5000
@@ -23,8 +25,10 @@ def latest():
 
 # Put the posted data directly on the queue
 @app.route('/post', methods=['POST'])
-def post(post_id):
-    return "Some kewl data"
+def post():
+    con = request.json
+    post_to_queue(con)
+    return "OK", 200
 
 
 # Run the app on 0.0.0.0:5001

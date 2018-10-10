@@ -1,20 +1,19 @@
 import pika
+import json
 
 # Establish a connection with RabbitMQ server.
-connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+url = 'amqp://pgkettyz:PIjFclgL5aB8c0ZP4OwWUZZ3DbgKEriY@raven.rmq.cloudamqp.com/pgkettyz'
+connection = pika.BlockingConnection(pika.ConnectionParameters(url))
 channel = connection.channel()
 
 # Create a `hello` queue to which the message will be delivered.
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue='Helge-api-posts')
 
 
-def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
-
-
-channel.basic_consume(callback,
-                      queue='hello',
-                      no_ack=True)
-
-print(' [*] Waiting for messages. To exit press CTRL+C')
-channel.start_consuming()
+def post_to_queue(message):
+    channel.basic_publish(exchange='',
+                          routing_key='Helge-api-posts',
+                          body=json.dumps(message),
+                          properties=pika.BasicProperties(
+                             delivery_mode = 2, # make message persistent
+                          ))
