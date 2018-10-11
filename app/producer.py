@@ -1,7 +1,7 @@
 import pika
 import json
 # Establish a connection with RabbitMQ server.
-url = 'amqp://pgkettyz:PIjFclgL5aB8c0ZP4OwWUZZ3DbgKEriY@raven.rmq.cloudamqp.com/pgkettyz'
+url = 'amqp://dkwttbup:6l_JoEG8FQQNFR-Imf-FWzs8H2avSPhe@lion.rmq.cloudamqp.com/dkwttbup'
 params = pika.URLParameters(url)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
