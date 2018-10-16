@@ -1,7 +1,6 @@
 from flask import Flask, request
 import rabbitmq_producer
 import requests
-import controller
 
 """
 API DOCUMENTATION : https://github.com/HackerNews/Helge-api
@@ -20,14 +19,14 @@ app = Flask(__name__)
 # Down if 400-500
 @app.route('/status', methods=['GET'])
 def status():
-    r = requests.get("http://backend-app:5000/api/post/status")
+    r = requests.get("http://backend-app:5000/helge-api/status")
     return r.content
 
 # Find latest digested post by querying the backend directly on port 5000
 @app.route('/latest', methods=['GET'])
 def latest():
-    latest_id = controller.get_latest_id()
-    return latest_id
+    r = requests.get("http://backend-app:5000/helge-api/latest")
+    return r.content
 
 # Put the posted data directly on the queue
 @app.route('/post', methods=['POST'])
