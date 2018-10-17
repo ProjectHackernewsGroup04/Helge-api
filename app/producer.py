@@ -3,6 +3,7 @@ import json
 import os
 # Establish a connection with RabbitMQ server.
 url = os.environ['CLOUDAMQP_URL']
+print(url)
 params = pika.URLParameters(url)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
