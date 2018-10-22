@@ -10,10 +10,10 @@ services:
     ports:
       - "5001:5001"
     networks:
-      - hacker-news-ops_default
+      - hackernews_ops
     volumes:
       - .:/app
 
 networks:
-  hacker-news-ops_default:
+  hackernews_ops:
     external: true
