@@ -17,7 +17,8 @@ backend_url = os.environ['BACKEND_URL']
 # Status if project is running
 @app.route('/status', methods=['GET'])
 def status():
-    return "Alive"
+    r = requests.get(backend_url + "/status")
+    return jsonify(r.json()), 200
 
 
 # Find latest digested post by querying the backend directly on port 5000
