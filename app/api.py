@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 from producer import post_to_queue
+import requests
+import os
 
 """
 API DOCUMENTATION : https://github.com/HackerNews/Helge-api
@@ -10,6 +12,7 @@ connected to a mongodb database.
 
 app = Flask(__name__)
 
+backend_url = os.environ['BACKEND_URL']
 
 # Status if project is running
 @app.route('/status', methods=['GET'])
@@ -20,7 +23,8 @@ def status():
 # Find latest digested post by querying the backend directly on port 5000
 @app.route('/latest', methods=['GET'])
 def latest():
-    return "42"
+    r = requests.get(backend_url + "/latest")
+    return jsonify(r.json()), 200
 
 
 # Put the posted data directly on the queue
