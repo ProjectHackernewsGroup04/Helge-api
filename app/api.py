@@ -33,7 +33,7 @@ def latest():
 @app.route('/post', methods=['POST'])
 def post():
     con = request.json
-    print(request.headers['Authorization'], file=sys.stderr)
+    con['auth'] = request.headers['Authorization']
     Producer.post_to_queue(con)
     return "OK", 200
 
