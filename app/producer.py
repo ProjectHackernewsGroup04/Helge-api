@@ -12,7 +12,7 @@ channel = connection.channel()
 # Using connection, posting to 'Helge-api-posts', serialized as JSON
 def post_to_queue(message):
     # Create a queue to which the message will be delivered.
-    channel.queue_declare(queue='helge-api-posts')
+    channel.queue_declare(queue='helge-api-posts', durable=True)
     channel.basic_publish(exchange='', routing_key='helge-api-posts', body=json.dumps(message),
                           properties=pika.BasicProperties(
                               content_type='text/plain',
