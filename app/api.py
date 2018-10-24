@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from producer import post_to_queue
+from producer import Producer
 import requests
 import os
 
@@ -32,7 +32,7 @@ def latest():
 @app.route('/post', methods=['POST'])
 def post():
     con = request.json
-    post_to_queue(con)
+    Producer.post_to_queue(con)
     return "OK", 200
 
 
