@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from producer import Producer
 import requests
 import os
+import sys
 
 """
 API DOCUMENTATION : https://github.com/HackerNews/Helge-api
@@ -32,6 +33,7 @@ def latest():
 @app.route('/post', methods=['POST'])
 def post():
     con = request.json
+    print(request.headers['Authorization'], file=sys.stderr)
     Producer.post_to_queue(con)
     return "OK", 200
 
