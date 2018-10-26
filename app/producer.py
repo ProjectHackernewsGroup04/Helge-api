@@ -1,12 +1,14 @@
 import pika
 import json
 import os
-
+import time
 class Producer():
+    time.sleep(10) #Waiting rabbitmq to be ready
     # Establish a connection with RabbitMQ server.
     url = os.environ['CLOUDAMQP_URL']
     params = pika.URLParameters(url)
-    connection = pika.BlockingConnection(params)
+    local = pika.ConnectionParameters('rabbitmq') #TEMP SOLUTION
+    connection = pika.BlockingConnection(local) #NEED TO RECONFIGURE TO WORK WITH ENVIRONMENT PATH, R
     channel = connection.channel()
 
     # Using connection, posting to 'Helge-api-posts', serialized as JSON
