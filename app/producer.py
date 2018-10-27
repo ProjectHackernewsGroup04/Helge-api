@@ -6,7 +6,11 @@ url = os.environ['CLOUDAMQP_URL']
 params = pika.URLParameters(url)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
-channel.queue_declare(queue='helge-api-posts', durable=True)
+
+try:
+    channel.queue_declare(queue='helge-api-posts', durable=True)
+except Exception:
+    channel.queue_declare(queue='helge-api-posts', durable=True)
 
 class Producer():
     # Establish a connection with RabbitMQ server.
