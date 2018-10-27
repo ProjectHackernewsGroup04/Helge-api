@@ -2,10 +2,14 @@ import pika
 import json
 import os
 
+url = os.environ['CLOUDAMQP_URL']
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
+channel.queue_declare(queue='helge-api-posts', durable=True)
+
 class Producer():
     # Establish a connection with RabbitMQ server.
-    url = os.environ['CLOUDAMQP_URL']
-    params = pika.URLParameters(url)
     connection = pika.BlockingConnection(params)
     channel = connection.channel()
 
@@ -21,7 +25,7 @@ class Producer():
                                       delivery_mode=2,  # make message persistent
                                   ))
         except pika.exceptions.ConnectionClosed:
-            cls.connection = pika.BlockingConnection(cls.params)
+            cls.connection = pika.BlockingConnection(params)
             cls.channel = cls.connection.channel()
         except pika.exceptions.ChannelClosed:
             cls.channel = cls.connection.channel()
