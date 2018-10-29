@@ -19,14 +19,16 @@ backend_url = os.environ['BACKEND_URL']
 @app.route('/status', methods=['GET'])
 def status():
     r = requests.get(backend_url + "/status")
-    return jsonify(r.json()), 200
+    json = r.json()
+    return json['status']
 
 
 # Find latest digested post by querying the backend directly on port 5000
 @app.route('/latest', methods=['GET'])
 def latest():
     r = requests.get(backend_url + "/latest")
-    return jsonify(r.json()), 200
+    json = r.json()
+    return json['id']
 
 
 # Put the posted data directly on the queue
