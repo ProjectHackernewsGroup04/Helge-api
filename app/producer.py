@@ -1,10 +1,17 @@
 import pika
 import json
 import os
+import time
 
 url = os.environ['CLOUDAMQP_URL']
 params = pika.URLParameters(url)
-connection = pika.BlockingConnection(params)
+connection = None
+try:
+    connection = pika.BlockingConnection(params)
+except pika.exceptions.ConnectionClosed:
+    time.sleep(5)
+    connection = pika.BlockingConnection(params)
+
 channel = connection.channel()
 
 try:
