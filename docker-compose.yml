@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment: 
-      - CLOUDAMQP_URL=amqp://guest:guest@rabbitmq:5672/rabbitmq_vhost
-      - BACKEND_URL=http://backend-app:5000
+      - CLOUDAMQP_URL=amqp://guest:guest@rabbitmq:5672/
+      - BACKEND_URL=http://backend:5000
     command: python -u app/api.py
     ports:
       - "5001:5001"

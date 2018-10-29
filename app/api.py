@@ -28,7 +28,7 @@ def status():
 def latest():
     r = requests.get(backend_url + "/latest")
     json = r.json()
-    return json['id']
+    return json['post']['id']
 
 
 # Put the posted data directly on the queue
