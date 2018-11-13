@@ -55,15 +55,24 @@ def latest():
 @IN_PROGRESS.track_inprogress()
 @TIMINGS.time()
 def post():
-    REQUESTS.labels(method='POST', endpoint="/post", status_code=200).inc()
-    con = request.json
-    con['auth'] = request.headers['Authorization']
-    Producer.post_to_queue(con)
-    return "OK", 200
+    try:
+        con = request.json
+        con['auth'] = request.headers['Authorization']
+        Producer.post_to_queue(con)
+        REQUESTS.labels(method='POST', endpoint="/post", status_code=200).inc()
+        return "OK", 200
+    except:
+        REQUESTS.labels(method='POST', endpoint="/post", status_code=400).inc()
+        return "ERROR", 400
+
 
 @app.route('/metrics', methods=['GET'])
 def metrics():
     return generate_latest(REGISTRY)
+
+@app.errorhandler(500)
+def handle_500(error):
+    return str(error), 500
 
 # Run the app on 0.0.0.0:5001
 if __name__ == '__main__':
