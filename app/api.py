@@ -55,16 +55,15 @@ def latest():
 @IN_PROGRESS.track_inprogress()
 @TIMINGS.time()
 def post():
-    while True:
-        try:
-            con = request.json
-            con['auth'] = request.headers['Authorization']
-            Producer.post_to_queue(con)
-            REQUESTS.labels(method='POST', endpoint="/post", status_code=200).inc()
-            return "OK", 200
-        except:
-            REQUESTS.labels(method='POST', endpoint="/post", status_code=400).inc()
-            return "ERROR", 400
+    try:
+        con = request.json
+        con['auth'] = request.headers['Authorization']
+        Producer.post_to_queue(con)
+        REQUESTS.labels(method='POST', endpoint="/post", status_code=200).inc()
+        return "OK", 200
+    except:
+        REQUESTS.labels(method='POST', endpoint="/post", status_code=400).inc()
+        return "ERROR", 400
 
 
 @app.route('/metrics', methods=['GET'])
