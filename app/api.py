@@ -5,6 +5,20 @@ import requests
 import os
 import sys
 
+from prometheus_client import start_http_server, Summary, Counter, Gauge, generate_latest, REGISTRY, Histogram
+
+# Create a metric to track time spent and requests made.
+REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+
+# A counter to count the total number of HTTP requests
+REQUESTS = Counter('http_requests_total', 'Total HTTP Requests (count)', ['method', 'endpoint', 'status_code'])
+
+# A gauge (i.e. goes up and down) to monitor the total number of in progress requests
+IN_PROGRESS = Gauge('http_requests_inprogress', 'Number of in progress HTTP requests')
+
+# A histogram to measure the latency of the HTTP requests
+TIMINGS = Histogram('http_request_duration_seconds', 'HTTP request latency (seconds)')
+
 """
 API DOCUMENTATION : https://github.com/HackerNews/Helge-api
 Python API service running on Flask framework,
@@ -38,12 +52,18 @@ def latest():
 
 # Put the posted data directly on the queue
 @app.route('/post', methods=['POST'])
+@IN_PROGRESS.track_inprogress()
+@TIMINGS.time()
 def post():
+    REQUESTS.labels(method='POST', endpoint="/post", status_code=200).inc()
     con = request.json
     con['auth'] = request.headers['Authorization']
     Producer.post_to_queue(con)
     return "OK", 200
 
+@app.route('/metrics', methods=['GET'])
+def metrics():
+    return generate_latest(REGISTRY)
 
 # Run the app on 0.0.0.0:5001
 if __name__ == '__main__':
