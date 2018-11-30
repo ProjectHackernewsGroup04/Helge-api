@@ -54,6 +54,8 @@ jobs:
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: docker build -t hnclonecphb/http-api:$CIRCLE_BRANCH .
       - run: docker push hnclonecphb/http-api:$CIRCLE_BRANCH
+      - run: docker build -t hnclonecphb/http-api:$CIRCLE_WORKFLOW_ID .
+      - run: docker push hnclonecphb/http-api:$CIRCLE_WORKFLOW_ID
 
       - store_artifacts:
           path: test-reports
@@ -66,10 +68,7 @@ jobs:
       - run:
           name: Deploy over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "docker pull hnclonecphb/http-api:$CIRCLE_BRANCH
-            docker stop http-api
-            docker rm http-api
-            docker run --name http-api --publish=5001:5001 --network=hnclone-network -e 'CLOUDAMQP_URL=$CLOUDAMQP_URL' -e 'BACKEND_URL=$BACKEND_URL' -d hnclonecphb/http-api:$CIRCLE_BRANCH"
+            ssh $SSH_USER@$SSH_HOST "docker service update --publish-add=5001:5001 --env-add 'CLOUDAMQP_URL=$CLOUDAMQP_URL' --env-add 'BACKEND_URL=$BACKEND_URL' -d hnclonecphb/http-api:$CIRCLE_WORKFLOW_ID http-api"
 
 workflows:
   version: 2
