@@ -68,7 +68,7 @@ jobs:
       - run:
           name: Deploy over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "docker service update --publish-add=5001:5001 --env-add 'CLOUDAMQP_URL=$CLOUDAMQP_URL' --env-add 'BACKEND_URL=$BACKEND_URL' -d hnclonecphb/http-api:$CIRCLE_WORKFLOW_ID http-api"
+            ssh $SSH_USER@$SSH_HOST "docker service update --publish-add=5001:5001 --env-add 'CLOUDAMQP_URL=$CLOUDAMQP_URL' --env-add 'BACKEND_URL=$BACKEND_URL' -d --image hnclonecphb/http-api:$CIRCLE_WORKFLOW_ID http-api"
 
 workflows:
   version: 2
