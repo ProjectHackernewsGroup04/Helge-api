@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+  helge-api:
+    image: hnclonecphb/http-api:master
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+          delay: 30s
+    environment:
+      - CLOUDAMQP_URL=amqp://guest:guest@rabbitmq:5672/
+      - BACKEND_URL=http://backend:5000
+    ports:
+      - 5001:5001
+    links:
+      - backend
+      - rabbitmq
+    depends_on:
+      - backend
+      - rabbitmq
+    networks:
+      - hackernews_ops
+
+networks:
+  hackernews_ops:
+    external: true
